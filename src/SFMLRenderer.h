@@ -8,6 +8,6 @@
 class SFMLRenderer
 {
 public:
-	static void drawMap(sf::RenderWindow&, Map&, sf::Vector2f&);
+	static void drawMap(sf::RenderWindow&, sf::RenderTexture&, sf::View&, Map&, int tileSize);
 };
 

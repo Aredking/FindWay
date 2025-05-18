@@ -1,12 +1,10 @@
 #include "SFMLRenderer.h"
 
-
-void SFMLRenderer::drawMap(sf::RenderWindow& window, Map& map, sf::Vector2f& gameAreaSize)
+void SFMLRenderer::drawMap(sf::RenderWindow& window, sf::RenderTexture& gameSurface, sf::View& view, Map& map, int tileSize)
 {
-    float h = static_cast<float>(gameAreaSize.y) / map.getHeight();
-    float w = static_cast<float>(gameAreaSize.x) / map.getWidth();
+    sf::Vector2f gameAreaSize{ static_cast<float>(gameSurface.getSize().x), static_cast<float>(gameSurface.getSize().y) };
 
-    float gap = .5f; // Размер зазора в пикселях
+    float gap = 1.f; // Размер зазора в пикселях
 
     sf::VertexArray vertices(sf::PrimitiveType::Triangles, map.getWidth() * map.getHeight() * 6);
 
@@ -16,10 +14,10 @@ void SFMLRenderer::drawMap(sf::RenderWindow& window, Map& map, sf::Vector2f& gam
         {
             int index = (i + j * map.getWidth()) * 6;
 
-            float x = w * i + gap;
-            float y = h * j + gap;
-            float tileWidth = w - gap * 2;
-            float tileHeight = h - gap * 2;
+            float x = tileSize * i + gap;
+            float y = tileSize * j + gap;
+            float tileWidth = tileSize - gap * 2;
+            float tileHeight = tileSize - gap * 2;
 
             sf::Color color = Map::getColorCell(map.getCell(j, i));
 
@@ -44,8 +42,29 @@ void SFMLRenderer::drawMap(sf::RenderWindow& window, Map& map, sf::Vector2f& gam
     }
 
     sf::RectangleShape backGround({ gameAreaSize.x, gameAreaSize.y });
-    backGround.setFillColor(sf::Color::Black);
+    backGround.setFillColor(sf::Color::Transparent);
+    //gameSurface.setView(view);
 
-    window.draw(backGround);
-    window.draw(vertices);
+    //gameSurface.clear();
+
+    //gameSurface.display();
+
+    //sf::RectangleShape debugRect(sf::Vector2f(100, 100));
+    //debugRect.setPosition({ 300, 300 });
+    //debugRect.setFillColor(sf::Color::Red);
+
+    //sf::View view(sf::FloatRect({ 0.f, 0.f }, { static_cast<float>(gameSurface.getSize().x) ,  static_cast<float>(gameSurface.getSize().y) }));
+
+
+    gameSurface.setView(view);
+
+
+    gameSurface.clear();
+    gameSurface.draw(backGround);
+    gameSurface.draw(vertices);
+    gameSurface.display();
+
+
+    sf::Sprite gameSurfaceSprite(gameSurface.getTexture());
+    window.draw(gameSurfaceSprite);
 }

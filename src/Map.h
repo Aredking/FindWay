@@ -41,6 +41,8 @@ public:
 	const std::vector<std::vector<Map::Cell>>& getMap();
 	void setCell(int, int, const Map::Cell&);
 
+	void setRandCells();
+
 	int getWidth();
 	int getHeight();
 	Map::Cell& getCell(int row, int col);

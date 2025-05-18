@@ -1,30 +1,44 @@
 #include "Engine.h"
 
-Engine::Engine() : window(sf::RenderWindow(sf::VideoMode({ 1200, 900 }), "ASTAR", sf::Style::Close))
+Engine::Engine() : window(sf::RenderWindow(sf::VideoMode({ 800, 600 }), "FIND WAY!", sf::Style::Close))
 {
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(FPS);
+	std::cout << "ENGINE Constructor" << std::endl;
 }
 
 void Engine::run()
 {
-	window.setActive(false);
+	std::cout << "RUN" << std::endl;
 
-	std::thread drawThread([&]() { drawThreading(); });
+	runnigDrawThread = true;
+	window.setActive(false);
+	drawThread = std::thread([&]() { drawThreading(); });
 
 	while (window.isOpen())
 	{
 		handleEvent();
 		update();
 	}
-	drawThread.join();
+
 }
 
 void Engine::drawThreading()
 {
-	while (window.isOpen())
+
+	std::cout << "DRAW" << std::endl;
+	window.setActive(true);
+
+	while (runnigDrawThread)
 	{
 		window.clear(sf::Color::White);
 		draw();
 		window.display();
 	}
+	window.setActive(false);
+}
+
+void Engine::BreakDrawThread()
+{
+	runnigDrawThread = false;
+	drawThread.join();
 }

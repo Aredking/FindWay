@@ -29,6 +29,23 @@ void Map::setCell(int row, int col, const Map::Cell& cell)
 	if (map[row][col] == Cell::Space) map[row][col] = cell;
 }
 
+void Map::setRandCells()
+{
+	srand(time(NULL));
+
+	for (int j = 0; j < getHeight(); ++j)
+	{
+		for (int i = 0; i < getWidth(); ++i)
+		{
+			map[j][i] = static_cast<Cell>(rand() % 4);
+			std::cout << static_cast<int>(map[j][i]) << " ";
+		}
+		std::cout<< std::endl;
+	}
+
+
+}
+
 Map::Cell& Map::getCell(int row, int col)
 {
 	return map[row][col];
